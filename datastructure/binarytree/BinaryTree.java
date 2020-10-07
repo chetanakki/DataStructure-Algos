@@ -16,13 +16,87 @@ public class BinaryTree {
 		insert(250);
 		insert(35);
 		insert(222);
-		System.out.println(rootNode);
+		//System.out.println(rootNode);
 		//preOrderTraversal(rootNode);
 		//levelOrderTraversal(rootNode);
-		System.out.println(search(222));
-		rootNode = null;
+		//System.out.println(search(222));
+		//System.out.println(findDeepestNode(rootNode));
+		System.out.println(delete(20));
+		preOrderTraversal(rootNode);
+		deleteBinaryTree();
 	}
 	
+	private static void deleteBinaryTree()
+	{
+		rootNode = null;
+	}
+	private static boolean delete(int value)
+	{
+		if(rootNode == null)
+		{
+			return false;
+		}
+		else
+		{
+			List<Node> queue = new ArrayList<>();
+			queue.add(rootNode);
+			Node node;
+			while(!queue.isEmpty())
+			{
+				node = queue.get(0);
+				if(node.value == value)
+				{
+					Node deepestNode = findDeepestNode(rootNode);
+					node.value = deepestNode.value;
+					deepestNode = null;
+					return true;
+				}
+				queue.remove(0);
+				if(node.left != null && node.right != null)
+				{
+					queue.add(node.left);
+					queue.add(node.right);
+				}
+				else if(node.left != null)
+				{
+					queue.add(node.left);
+				}
+				else if(node.right != null)
+				{
+					queue.add(node.right);
+				}
+			}
+			queue.clear();
+		}
+		return false;
+	}
+	private static Node findDeepestNode(Node root)
+	{
+		List<Node> queue = new ArrayList<>();
+		queue.add(root);
+		Node node = null;
+		while(!queue.isEmpty())
+		{
+			node = queue.get(0);
+			//System.out.println(node.value);
+			queue.remove(0);
+			if(node.left != null && node.right != null)
+			{
+				queue.add(node.left);
+				queue.add(node.right);
+			}
+			else if(node.left != null)
+			{
+				queue.add(node.left);
+			}
+			else if(node.right != null)
+			{
+				queue.add(node.right);
+			}
+		}
+		queue.clear();
+		return node;
+	}
 	private static boolean search(int value)
 	{
 		if(rootNode == null)
@@ -39,6 +113,7 @@ public class BinaryTree {
 				node = queue.get(0);
 				if(node.value == value)
 				{
+					queue.clear();
 					return true;
 				}
 				queue.remove(0);
